@@ -425,4 +425,347 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .error-message {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 15px;
+            border-radius: 12px;
+            margin-top: 10px;
+            text-align: center;
+            font-weight: 500;
+            display: none;
+        }
+
+        .remove-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 5px 10px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-left: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚛 Trucker Expense Tracker</h1>
+            <p>Track your daily expenses in under 2 minutes</p>
+        </div>
+        
+        <div id="main-app">
+            <div class="date-banner">
+                <h2 id="current-date" aria-live="polite"></h2>
+                <p>Log your expenses for today</p>
+            </div>
+            
+            <nav class="tabs" role="tablist">
+                <button class="tab active" id="fuel-tab" onclick="switchTab('fuel')" role="tab" aria-selected="true" aria-controls="fuel-panel">Fuel</button>
+                <button class="tab" id="tolls-tab" onclick="switchTab('tolls')" role="tab" aria-selected="false" aria-controls="tolls-panel">Tolls</button>
+                <button class="tab" id="maintenance-tab" onclick="switchTab('maintenance')" role="tab" aria-selected="false" aria-controls="maintenance-panel">Maintenance</button>
+                <button class="tab" id="other-tab" onclick="switchTab('other')" role="tab" aria-selected="false" aria-controls="other-panel">Other</button>
+            </nav>
+            
+            <div id="fuel-panel" class="tab-content active" role="tabpanel" aria-labelledby="fuel-tab">
+                <div class="expense-header">
+                    <div class="expense-icon">⛽</div>
+                    <div class="expense-title">Fuel</div>
+                </div>
+                <div class="input-group">
+                    <label for="fuel-amount">Amount spent on fuel today:</label>
+                    <div class="amount-input">
+                        <input type="number" id="fuel-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="fuel-amount-error">
+                    </div>
+                    <div id="fuel-amount-error" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="fuel-gallons">Gallons purchased:</label>
+                    <input type="number" id="fuel-gallons" step="0.1" min="0" placeholder="0.0" aria-describedby="fuel-gallons-error">
+                    <div id="fuel-gallons-error" class="error-message"></div>
+                </div>
+            </div>
+            
+            <div id="tolls-panel" class="tab-content" role="tabpanel" aria-labelledby="tolls-tab">
+                <div class="expense-header">
+                    <div class="expense-icon">🛣️</div>
+                    <div class="expense-title">Tolls</div>
+                </div>
+                <div class="input-group">
+                    <label for="toll-amount">Amount spent on tolls today:</label>
+                    <div class="amount-input">
+                        <input type="number" id="toll-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="toll-amount-error">
+                    </div>
+                    <div id="toll-amount-error" class="error-message"></div>
+                </div>
+            </div>
+            
+            <div id="maintenance-panel" class="tab-content" role="tabpanel" aria-labelledby="maintenance-tab">
+                <div class="expense-header">
+                    <div class="expense-icon">🔧</div>
+                    <div class="expense-title">Maintenance</div>
+                </div>
+                <div class="input-group">
+                    <label for="maintenance-amount">Amount spent on maintenance today:</label>
+                    <div class="amount-input">
+                        <input type="number" id="maintenance-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="maintenance-amount-error">
+                    </div>
+                    <div id="maintenance-amount-error" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="maintenance-type">Type of maintenance:</label>
+                    <select id="maintenance-type" aria-describedby="maintenance-type-error">
+                        <option value="">Select type</option>
+                        <option value="oil-change">Oil Change</option>
+                        <option value="tire-repair">Tire Repair/Replacement</option>
+                        <option value="brake-service">Brake Service</option>
+                        <option value="engine-repair">Engine Repair</option>
+                        <option value="transmission">Transmission Service</option>
+                        <option value="other">Other</option>
+                    </select>
+                    <div id="maintenance-type-error" class="error-message"></div>
+                </div>
+            </div>
+            
+            <div id="other-panel" class="tab-content" role="tabpanel" aria-labelledby="other-tab">
+                <div class="expense-header">
+                    <div class="expense-icon">📝</div>
+                    <div class="expense-title">Other Expenses</div>
+                </div>
+                <div class="input-group">
+                    <label for="other-amount">Amount for other expenses:</label>
+                    <div class="amount-input">
+                        <input type="number" id="other-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="other-amount-error">
+                    </div>
+                    <div id="other-amount-error" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="other-description">Description:</label>
+                    <input type="text" id="other-description" placeholder="e.g., parking, meals, supplies" aria-describedby="other-description-error">
+                    <div id="other-description-error" class="error-message"></div>
+                </div>
+            </div>
+            
+            <div id="custom-categories"></div>
+            
+            <div class="expense-card" style="border: 2px dashed #6366f1; background: rgba(99, 102, 241, 0.1);">
+                <div class="expense-header">
+                    <div class="expense-icon">➕</div>
+                    <div class="expense-title">Add New Category</div>
+                </div>
+                <div class="input-group">
+                    <label for="new-category-name">Category Name:</label>
+                    <input type="text" id="new-category-name" placeholder="e.g., Parking, Meals, Supplies, Insurance" aria-describedby="new-category-name-error">
+                    <div id="new-category-name-error" class="error-message"></div>
+                </div>
+                <div class="input-group">
+                    <label for="new-category-icon">Choose Icon:</label>
+                    <select id="new-category-icon" aria-label="Select icon for new category">
+                        <option value="🅿️">🅿️ Parking</option>
+                        <option value="🍔">🍔 Meals</option>
+                        <option value="📦">📦 Supplies</option>
+                        <option value="📄">📄 Insurance</option>
+                        <option value="📱">📱 Phone/Internet</option>
+                        <option value="🚿">🚿 Shower</option>
+                        <option value="🛏️">🛏️ Lodging</option>
+                        <option value="⚖️">⚖️ Permits/Licenses</option>
+                        <option value="🧽">🧽 Truck Wash</option>
+                        <option value="💰">💰 Other</option>
+                    </select>
+                </div>
+                <button class="save-btn" onclick="addCustomCategory()" style="margin-top: 10px; padding: 10px;" aria-label="Add new expense category">
+                    ➕ Add This Category
+                </button>
+            </div>
+            
+            <div class="summary">
+                <h3>📊 Today's Summary</h3>
+                <div class="summary-item">
+                    <span>Fuel:</span>
+                    <span id="fuel-summary">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Tolls:</span>
+                    <span id="toll-summary">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Maintenance:</span>
+                    <span id="maintenance-summary">$0.00</span>
+                </div>
+                <div class="summary-item">
+                    <span>Other:</span>
+                    <span id="other-summary">$0.00</span>
+                </div>
+                <div id="custom-summary"></div>
+                <div class="summary-item">
+                    <span>Total Daily Expenses:</span>
+                    <span id="total-summary">$0.00</span>
+                </div>
+            </div>
+            
+            <button class="save-btn" onclick="saveExpenses()" aria-label="Save today's expenses">💾 Save Today's Expenses</button>
+            <button class="history-btn" onclick="showHistory()" aria-label="View expense history">📚 View Expense History</button>
+            <button class="insights-btn" onclick="showInsights()" aria-label="View expense insights">📈 View Insights</button>
+            
+            <div class="success-message" id="success-message">
+                ✅ Expenses saved successfully! Great job tracking your daily costs.
+                <button onclick="dismissSuccessMessage()" aria-label="Dismiss success message">×</button>
+            </div>
+            <div class="error-message" id="error-message"></div>
+        </div>
+        
+        <div id="history-section" class="history-section">
+            <button class="back-btn" onclick="showMainApp()" aria-label="Back to main app">← Back to Today</button>
+            <h2 style="color: white; margin-bottom: 20px;">📚 Expense History</h2>
+            
+            <div class="controls">
+                <button class="export-btn" onclick="exportData()" aria-label="Export data as CSV">📊 Export CSV</button>
+                <button class="backup-btn" onclick="backupData()" aria-label="Backup data">💾 Backup</button>
+                <button class="restore-btn" onclick="restoreData()" aria-label="Restore data">🔄 Restore</button>
+            </div>
+            
+            <div class="filter-section">
+                <h3>🔍 Filter Expenses</h3>
+                <div class="filter-row">
+                    <input type="date" id="date-from" placeholder="From Date" aria-label="Filter from date">
+                    <input type="date" id="date-to" placeholder="To Date" aria-label="Filter to date">
+                </div>
+                <div class="filter-row">
+                    <button onclick="filterExpenses()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;" aria-label="Apply date filter">Apply Filter</button>
+                    <button onclick="clearFilter()" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;" aria-label="Clear date filter">Clear</button>
+                </div>
+            </div>
+            
+            <div id="history-list" aria-live="polite"></div>
+            <div class="error-message" id="history-error-message"></div>
+        </div>
+
+        <div id="insights-section" class="insights-section">
+            <button class="back-btn" onclick="showMainApp()" aria-label="Back to main app">← Back to Today</button>
+            <h2 style="color: white; margin-bottom: 20px;">📈 Expense Insights</h2>
+            
+            <div class="filter-section">
+                <h3>🔍 Filter Insights</h3>
+                <div class="filter-row">
+                    <input type="date" id="insights-date-from" placeholder="From Date" aria-label="Insights filter from date">
+                    <input type="date" id="insights-date-to" placeholder="To Date" aria-label="Insights filter to date">
+                </div>
+                <div class="filter-row">
+                    <button onclick="renderInsights()" style="background: #2563eb; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;" aria-label="Apply insights date filter">Apply Filter</button>
+                    <button onclick="clearInsightsFilter()" style="background: #6b7280; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer;" aria-label="Clear insights date filter">Clear</button>
+                </div>
+            </div>
+            
+            <div class="stat-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="total-expenses">$0</div>
+                    <div class="stat-label">Total Expenses</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avg-daily">$0</div>
+                    <div class="stat-label">Daily Average</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="highest-day">$0</div>
+                    <div class="stat-label">Highest Day</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="days-tracked">0</div>
+                    <div class="stat-label">Days Tracked</div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <h3>📊 Expense Breakdown</h3>
+                <canvas id="expense-chart" aria-label="Expense breakdown chart"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3>📈 Monthly Trend</h3>
+                <canvas id="monthly-chart" aria-label="Monthly expense trend chart"></canvas>
+            </div>
+            <div class="error-message" id="insights-error-message"></div>
+        </div>
+
+        <div id="edit-modal" class="modal" role="dialog" aria-labelledby="modal-title">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title" id="modal-title">Edit Expense</h3>
+                    <button class="close-btn" onclick="closeEditModal()" aria-label="Close edit modal">×</button>
+                </div>
+                <nav class="tabs" role="tablist">
+                    <button class="tab active" id="edit-fuel-tab" onclick="switchEditTab('fuel')" role="tab" aria-selected="true" aria-controls="edit-fuel-panel">Fuel</button>
+                    <button class="tab" id="edit-tolls-tab" onclick="switchEditTab('tolls')" role="tab" aria-selected="false" aria-controls="edit-tolls-panel">Tolls</button>
+                    <button class="tab" id="edit-maintenance-tab" onclick="switchEditTab('maintenance')" role="tab" aria-selected="false" aria-controls="edit-maintenance-panel">Maintenance</button>
+                    <button class="tab" id="edit-other-tab" onclick="switchEditTab('other')" role="tab" aria-selected="false" aria-controls="edit-other-panel">Other</button>
+                </nav>
+                <div id="edit-fuel-panel" class="tab-content active" role="tabpanel" aria-labelledby="edit-fuel-tab">
+                    <div class="input-group">
+                        <label for="edit-fuel-amount">Fuel Amount:</label>
+                        <div class="amount-input">
+                            <input type="number" id="edit-fuel-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="edit-fuel-amount-error">
+                        </div>
+                        <div id="edit-fuel-amount-error" class="error-message"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-fuel-gallons">Fuel Gallons:</label>
+                        <input type="number" id="edit-fuel-gallons" step="0.1" min="0" placeholder="0.0" aria-describedby="edit-fuel-gallons-error">
+                        <div id="edit-fuel-gallons-error" class="error-message"></div>
+                    </div>
+                </div>
+                <div id="edit-tolls-panel" class="tab-content" role="tabpanel" aria-labelledby="edit-tolls-tab">
+                    <div class="input-group">
+                        <label for="edit-toll-amount">Toll Amount:</label>
+                        <div class="amount-input">
+                            <input type="number" id="edit-toll-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="edit-toll-amount-error">
+                        </div>
+                        <div id="edit-toll-amount-error" class="error-message"></div>
+                    </div>
+                </div>
+                <div id="edit-maintenance-panel" class="tab-content" role="tabpanel" aria-labelledby="edit-maintenance-tab">
+                    <div class="input-group">
+                        <label for="edit-maintenance-amount">Maintenance Amount:</label>
+                        <div class="amount-input">
+                            <input type="number" id="edit-maintenance-amount" step="0.01" min="0" placeholder="0.00" aria-describedby="edit-maintenance-amount-error">
+                        </div>
+                        <div id="edit-maintenance-amount-error" class="error-message"></div>
+                    </div>
+                    <div class="input-group">
+                        <label for="edit-maintenance-type">Maintenance Type:</label>
+                        <select id="edit-maintenance-type" aria-describedby="edit-maintenance-type-error">
+                            <option value="">Select type
